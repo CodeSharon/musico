@@ -149,6 +149,10 @@ button{
         <input type="password" placeholder="Password" id="password">
 
         <button>Log In</button>
+        <div class="social">
+          <div class="go"><i class="fab fa-google"></i>  Google</div>
+          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+        </div>
     </form>
 </body>
 </html>
@@ -302,28 +306,67 @@ button{
         <label for="password">Password</label>
         <input type="password" placeholder="Password" id="password">
 
-        <button>Log In</button>
+        <button id="action-button">Log In</button>
         <p>Don't have an account? <a href="#" id="toggle-signup">Sign Up</a></p>
     </form>
-</body>
-</html>
 
-<script>
-    document.getElementById('toggle-signup').addEventListener('click', function(event) {
+ 
+    <script>
+        document.getElementById('toggle-signup').addEventListener('click', function(event) {
     event.preventDefault();
     const title = document.getElementById('form-title');
     const actionButton = document.getElementById('action-button');
+    const signupFields = document.getElementById('signup-fields');
     const toggleLink = document.getElementById('toggle-signup');
     
     if (title.innerText === 'Login Here') {
         title.innerText = 'Sign Up Here';
         actionButton.innerText = 'Sign Up';
+        signupFields.style.display = 'block';
         toggleLink.innerText = 'Already have an account? Log In';
     } else {
         title.innerText = 'Login Here';
         actionButton.innerText = 'Log In';
+        signupFields.style.display = 'none';
         toggleLink.innerText = "Don't have an account? Sign Up";
     }
 });
 
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const email = document.getElementById('email') ? document.getElementById('email').value : null;
+    
+    if (email) {
+        // Sign-up logic with Cognito
+        const response = await fetch('/signup', {
+            method: 'POST',
+            body: JSON.stringify({ username, password, email }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+            alert('Sign-up successful. Please log in.');
+            window.location.reload();
+        } else {
+            alert('Sign-up failed. Please try again.');
+        }
+    } else {
+        // Log-in logic with Cognito
+        const response = await fetch('/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+            window.location.href = 'index.html';
+        } else {
+            alert('Login failed. Please try again.');
+        }
+    }
+});
+
 </script>
+        
+</body>
+</html>
