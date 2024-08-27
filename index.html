@@ -297,8 +297,8 @@ button{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form>
-        <h3>Login Here</h3>
+    <form id="loginForm">
+        <h3 id="form-title">Login Here</h3>
 
         <label for="username">Username</label>
         <input type="text" placeholder="Email or Phone" id="username">
@@ -359,7 +359,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             headers: { 'Content-Type': 'application/json' }
         });
         if (response.ok) {
-            window.location.href = 'index.html';
+            window.location.href = 'home.html';
         } else {
             alert('Login failed. Please try again.');
         }
